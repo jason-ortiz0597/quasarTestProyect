@@ -65,10 +65,18 @@
             <q-item clickable v-ripple :active="link === 'productosTest'" @click="link = 'productosTest'"
               active-class="my-menu-link" to="/productTest" >
               <q-item-section avatar>
-                <q-icon name="category" />
+                <q-icon name="shopping_bag" />
               </q-item-section>
 
-              <q-item-section>ProductosTest</q-item-section>
+              <q-item-section>Lista de Compras</q-item-section>
+            </q-item>
+            <q-item clickable v-ripple :active="link === 'imageTest'" @click="link = 'imageTest'"
+              active-class="my-menu-link" to="/imageTest" >
+              <q-item-section avatar>
+                <q-icon name="shopping_bag" />
+              </q-item-section>
+
+              <q-item-section>Imagenes Siipi</q-item-section>
             </q-item>
           </q-expansion-item>
         </q-list>
