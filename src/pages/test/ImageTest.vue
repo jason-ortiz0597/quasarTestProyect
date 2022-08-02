@@ -21,13 +21,18 @@
                 <q-input v-model="name" type="text" label="Nombre Producto" filled />
                 <q-input v-model="description" type="text" label="Descripcion Breve Producto" filled />
                 <q-input v-model="price" type="text" label="Precio Producto" filled />
-                <q-input v-model="image" type="file" label="Imagen Producto" />
+                <q-file outlined v-model="image">
+                    <template v-slot:prepend>
+                        <q-icon name="attach_file" />
+                    </template>
+                </q-file>
 
 
 
                 <div>
                     <q-btn label="Agregar" type="submit" color="primary" />
                     <q-btn label="Cancelar" type="reset" color="warning" class="q-ml-sm" />
+                   
                 </div>
             </q-form>
             <br>
@@ -36,9 +41,9 @@
             </div>
         </div>
 
-
+            
     </div>
-
+{{ imagenStore.products }}
 </template>
 
 <script>
@@ -54,8 +59,11 @@ export default defineComponent({
         const name = ref('')
         const description = ref('')
         const price = ref('')
-        const image = ref('')
         const products = ref([])
+        const image = ref(null)
+        
+
+
         const onHide = () => {
             hide.value = !hide.value
         }
@@ -63,12 +71,18 @@ export default defineComponent({
             name.value = ''
             description.value = ''
             price.value = ''
-            image.value = ''
+            image.value = null
+
         }
+        
         const onSubmit = () => {
             imagenStore.addImage(name.value, description.value, price.value, image.value)
             onReset()
+            console.log(imagenStore.image, imagenStore.name)
         }
+
+        
+
         return {
             imagenStore,
             titlle,
@@ -76,12 +90,11 @@ export default defineComponent({
             name,
             description,
             price,
-            image,
             onHide,
             onReset,
+            products,
+            image,
             onSubmit,
-            products
-
         }
     }
 })

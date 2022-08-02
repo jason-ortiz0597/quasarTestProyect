@@ -12,11 +12,16 @@ export const useImagenStore = defineStore('image', () => {
 
     const addImage = async (name, description , price, image) => {
         const response = await api.post('/createProduct', {
-            name,
-            description,
-            price,
-            image
+            name ,
+            description ,
+            price ,
+            image 
         });
+        return response.data;
+    }
+    
+    const getProducts = async () => {
+        const response = await api.get('/listProduct');
         return response.data;
     }
 
@@ -26,8 +31,9 @@ export const useImagenStore = defineStore('image', () => {
         name,
         description,
         price,
-        image,
+        image ,
         products,
-        addImage
+        addImage,
+        getProducts
     }
 });

@@ -5,12 +5,15 @@
       <q-toolbar class="bg-primary glossy text-white">
         <q-btn @click="drawer = !drawer" flat round dense icon="menu" class="q-mr-sm" />
         <q-avatar size="80px">
-          <img src="~assets/logo-sii-pi-verde.svg">
+          <q-img
+            src="https://res.cloudinary.com/siibolivia/image/upload/v1659459482/product-imagesSiipi/bf2fhs1hckgyxpcqniri.png" />
+
+          />
         </q-avatar>
 
         <q-toolbar-title class="text-center">SIIIPI SISTEMAS</q-toolbar-title>
 
-        <q-btn flat round dense icon="home" />
+        <q-btn flat round dense icon="home" to="/" />
         <q-btn flat round dense icon="person" />
       </q-toolbar>
 
@@ -63,7 +66,7 @@
           <!-- Expansion Menu End. -->
           <q-expansion-item :content-inset-level="0.5" expand-separator icon="science" label="Mis Practicas">
             <q-item clickable v-ripple :active="link === 'productosTest'" @click="link = 'productosTest'"
-              active-class="my-menu-link" to="/productTest" >
+              active-class="my-menu-link" to="/productTest">
               <q-item-section avatar>
                 <q-icon name="shopping_bag" />
               </q-item-section>
@@ -71,7 +74,7 @@
               <q-item-section>Lista de Compras</q-item-section>
             </q-item>
             <q-item clickable v-ripple :active="link === 'imageTest'" @click="link = 'imageTest'"
-              active-class="my-menu-link" to="/imageTest" >
+              active-class="my-menu-link" to="/imageTest">
               <q-item-section avatar>
                 <q-icon name="shopping_bag" />
               </q-item-section>
