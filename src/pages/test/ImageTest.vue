@@ -21,18 +21,15 @@
                 <q-input v-model="name" type="text" label="Nombre Producto" filled />
                 <q-input v-model="description" type="text" label="Descripcion Breve Producto" filled />
                 <q-input v-model="price" type="text" label="Precio Producto" filled />
-                <q-file outlined v-model="image">
-                    <template v-slot:prepend>
-                        <q-icon name="attach_file" />
-                    </template>
-                </q-file>
+                <q-file v-model="images" label="Pick files" outlined use-chips multiple style="max-width: 300px" />
 
 
 
                 <div>
                     <q-btn label="Agregar" type="submit" color="primary" />
                     <q-btn label="Cancelar" type="reset" color="warning" class="q-ml-sm" />
-                   
+                    <q-btn label="listarProductos" @click="list" color="secondary" class="q-ml-sm" />
+
                 </div>
             </q-form>
             <br>
@@ -41,13 +38,50 @@
             </div>
         </div>
 
-            
+
     </div>
-{{ imagenStore.products }}
+    <div class="q-pa-md q-gutter-md">
+
+        <q-list bordered style="max-height: 500px ; max-width: 500px">
+            <q-item v-for="({ name, description, price, image }, index) in imagenStore.products" :key="index" clickable
+                v-ripple>
+                <q-item-section>
+                    {{ name }} - {{ description }} - {{ price }}
+                </q-item-section>
+
+                <q-item-section>
+                    <q-img :src="image.secure_url" />
+                </q-item-section>
+
+                <q-item-section>
+                    <div class="q-ml-md">
+                        <q-btn class="q-ml-sm" color="negative" round icon="delete" />
+                        <q-btn class="q-ml-sm" color="primary" round icon="done" />
+
+                    </div>
+                </q-item-section>
+
+
+            </q-item>
+
+
+
+
+        </q-list>
+
+    </div>
+
+
+    <div class="q-pa-md">
+        <q-table title="Treats" :rows="rows" :columns="columns" row-key="name" />
+    </div>
+
+
+
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 import { useImagenStore } from 'stores/imagen-store'
 
 export default defineComponent({
@@ -60,8 +94,34 @@ export default defineComponent({
         const description = ref('')
         const price = ref('')
         const products = ref([])
-        const image = ref(null)
+        const images = ref([])
+        const rows = ref([])
+        const columns = ref([
+            {
+                name: 'name',
+                label: 'Nombre',
+                align: 'left'
+            },
+            {
+                name: 'description',
+                label: 'Descripcion',
+                align: 'left'
+            },
+            {
+                name: 'price',
+                label: 'Precio',
+                align: 'left'
+            },
+            {
+                name: 'image',
+                label: 'Imagen',
+                align: 'left'
+            }
+    
+        ])
+
         
+
 
 
         const onHide = () => {
@@ -71,17 +131,21 @@ export default defineComponent({
             name.value = ''
             description.value = ''
             price.value = ''
-            image.value = null
+            images.value = []
 
         }
-        
+
         const onSubmit = () => {
-            imagenStore.addImage(name.value, description.value, price.value, image.value)
-            onReset()
-            console.log(imagenStore.image, imagenStore.name)
+            imagenStore.addImage(name.value, description.value, price.value, images.value)
+            console.log(imagenStore.images)
+
         }
 
-        
+        const list = () => {
+            imagenStore.getProducts()
+        }
+
+
 
         return {
             imagenStore,
@@ -93,8 +157,11 @@ export default defineComponent({
             onHide,
             onReset,
             products,
-            image,
+            images,
             onSubmit,
+            list,
+            rows,
+            columns
         }
     }
 })
