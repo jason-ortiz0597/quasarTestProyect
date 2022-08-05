@@ -18,7 +18,7 @@
             <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md" v-if="!hide">
                 <q-input v-model="name" type="text" label="Nombre Producto" filled />
 
-                <q-input v-model="price" type="text" label="Precio Producto" filled />
+                <q-input v-model="price" type="number" label="Precio Producto" filled />
                 <q-checkbox label-right v-model="priority" label="Priorida" />
 
 
@@ -36,21 +36,30 @@
                         class="static-class" :class="{ strikeout: purchased, priority: highpriority }"
                         @click="tooglePurchased(reverseItems[index])">
 
-                        <q-item-section>{{ index + 1 }}. - {{ name }} | {{ price }} </q-item-section>
-                        <div>
-                            <q-item-section>
+                        <q-item-section>{{ index + 1 }}. </q-item-section>
+                        <q-item-section> {{ name }} </q-item-section>
+                        <q-item-section>{{ price }}  Bs</q-item-section>
 
+
+
+                        <q-item-section>
+                            <div>
                                 <q-btn color="primary" class="q-ml-sm" flat icon="edit"
                                     @click="onUpdate(reverseItems[index])" />
-
-
                                 <q-btn color="secondary" class="q-ml-sm" flat icon="delete"
                                     @click="onDelete(reverseItems[index])" />
-                            </q-item-section>
+                            </div>
 
-                        </div>
 
+                        </q-item-section>
+
+
+
+
+                           
                     </q-item>
+                     <q-btn color="primary" icon="print"  @click="onGenerate" />
+                    
                 </q-list>
 
 
@@ -64,6 +73,9 @@
 
 <script>
 import { defineComponent, ref, computed } from 'vue'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable';
+
 
 export default defineComponent({
     name: 'ProductTest',
@@ -115,10 +127,32 @@ export default defineComponent({
             priority.value = item.highpriority
             highpriority.value = item.highpriority
             hide.value = false
-           
+
         }
         const onDelete = (item) => {
             items.value = items.value.filter(i => i.id !== item.id)
+        }
+
+        const onGenerate = () => {
+            const doc = new jsPDF()
+            const total = items.value.reduce((acc, item) => acc + item.price, 0)
+           
+
+            doc.text('LISTA DE COMPRAS', 10, 10)
+            //doc.addImage('https://res.cloudinary.com/siibolivia/image/upload/v1659629993/product-imagesSiipi/ghupsavgptbsi3gpxwff.jpg', 'jpg', 10, 20, 50, 50)
+            
+            
+            doc.autoTable({
+                head: [
+                    ['ID', 'Nombre', 'Precio', 'Prioridad']
+                    
+                ],
+                body: items.value.map(item => [
+                    item.id, item.name, item.price, item.highpriority ? 'Si' : 'No'
+                ])
+            })
+            //doc.text(`Total: ${total} Bs`, 10, doc.autoTable.previous.finalY + 10)
+            doc.save('lista.pdf')
         }
 
         return {
@@ -135,7 +169,8 @@ export default defineComponent({
             tooglePurchased,
             reverseItems,
             onUpdate,
-            onDelete
+            onDelete,
+            onGenerate
         }
     }
 })

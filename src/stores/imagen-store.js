@@ -7,15 +7,16 @@ export const useImagenStore = defineStore('image', () => {
     const name = ref('');
     const description = ref('');
     const price = ref('');
-    const images = ref([]);
+    const image = ref([]);
     const products = ref([]);
+   
 
-    const addImage = async (name, description , price, images) => {
+    const addImage = async (name, description , price, image) => {
         const response = await api.post('/createProduct', {
             name ,
             description ,
             price ,
-            images,
+            image,
             
         });
         console.log(response);
@@ -27,6 +28,7 @@ export const useImagenStore = defineStore('image', () => {
         response.data.map(product => {
             products.value.push(product);
         } );
+    
         return response.data;
       
     }
@@ -38,13 +40,17 @@ export const useImagenStore = defineStore('image', () => {
 
     
 
+    
+
     return {
         name,
         description,
         price,
-        images ,
+        image ,
         products,
         addImage,
-        getProducts
+        getProducts,
+        deleteProduct
+       
     }
 });
