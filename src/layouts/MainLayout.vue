@@ -76,11 +76,13 @@
             <q-item clickable v-ripple :active="link === 'imageTest'" @click="link = 'imageTest'"
               active-class="my-menu-link" to="/imageTest">
               <q-item-section avatar>
-                <q-icon name="shopping_bag" />
+                <q-icon name="photo_camera" />
               </q-item-section>
 
               <q-item-section>Imagenes Siipi</q-item-section>
             </q-item>
+
+          
           </q-expansion-item>
         </q-list>
       </q-scroll-area>
