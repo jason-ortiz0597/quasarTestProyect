@@ -19,7 +19,7 @@
           :ratio="16/9"
           spinner-color="primary"
           spinner-size="82px"
-          style="max-width: 800px; height: 550px;"
+          style="max-width: 300px; height: 350px;"
          />
       </div>
       

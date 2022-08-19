@@ -18,12 +18,14 @@
 
         <div class="col-md-6">
 
-            <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md" v-if="!hide" >
+            <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md" v-if="!hide">
                 <q-input v-model="name" type="text" label="Nombre Producto" filled />
                 <q-input v-model="description" type="text" label="Descripcion Breve Producto" filled />
                 <q-input v-model="price" type="text" label="Precio Producto" filled />
+                <q-input v-model="category" type="text" label="Categoria" filled/>
+                <q-input v-model="status" type="text" label="Estado del Producto" filled/>
 
-                <q-file v-model="file" label="Upload you Image" name="file" />
+                <q-file v-model="file" label="Upload you Image" name="file" filled/>
 
 
                 <div>
@@ -39,22 +41,28 @@
                 <div class="q-pa-md q-gutter-md">
 
                     <q-list bordered>
-                        <q-item v-for="({ _id, name, description, price, image }, index) in imagenStore.products"
+                        <q-item v-for="({ _id, name, description, price, category, status ,image }, index) in imagenStore.products"
                             :key="index" clickable v-ripple>
                             <q-item-section>
                                 {{ index + 1 }}
                             </q-item-section>
-                            <q-item-section>
+                            <q-item-section  >
                                 {{ name }}
                             </q-item-section>
                             <q-item-section>
                                 {{ description }}
                             </q-item-section>
                             <q-item-section>
-                                {{ price }}
+                                {{ price }} Bs
                             </q-item-section>
                             <q-item-section>
-                                <img :src="image.secure_url"  width="100" height="100" />
+                                {{ category }}
+                            </q-item-section>
+                            <q-item-section>
+                                {{ status }}
+                            </q-item-section>
+                            <q-item-section>
+                                <img :src="image.secure_url" width="100" height="100" />
                             </q-item-section>
 
 
@@ -66,7 +74,7 @@
                                 <q-btn class="q-ml-xs" color="negative" @click="deleteProduct(_id)" flat round
                                     icon="delete" />
                                 <q-btn class="q-ml-xs" color="secondary" flat round icon="edit"
-                                    @click="confirm2 = true" />
+                                    @click="onUpdate(_id, name, description, price, image)" />
                                 <q-btn class="q-ml-xs" color="primary" flat round icon="visibility"
                                     @click="confirm = true">
                                 </q-btn>
@@ -105,32 +113,7 @@
     </q-dialog>
 
 
-    <q-dialog v-model="confirm2" persistent>
-        <q-card>
-            <q-card-section class="row items-center">
 
-
-                <div class="justify-center">
-                    <span class="q-ml-sm">Actualizar Producto</span>
-                    <q-form @submit="onUpdate" class="q-gutter-md">
-                        <q-input v-model="name" type="text" label="Nombre del Producto" />
-                        <q-input v-model="description" type="text" label="Descripcion Breve Producto" filled />
-                        <q-input v-model="price" type="text" label="Precio Producto" filled />
-                        <q-file color="teal" filled v-model="file" label="Label">
-                            <template v-slot:prepend>
-                                <q-icon name="cloud_upload" />
-                            </template>
-                        </q-file>
-                        <div>
-                            <q-btn flat label="Añadir" type="submit" color="primary" />
-                            <q-btn flat label="Cancelar" color="warning" v-close-popup />
-                        </div>
-
-                    </q-form>
-                </div>
-            </q-card-section>
-        </q-card>
-    </q-dialog>
 
 
 
@@ -152,10 +135,12 @@ export default defineComponent({
         const name = ref('')
         const description = ref('')
         const price = ref('')
+        const category = ref('')
+        const status = ref('')
         const products = ref([])
         const file = ref([])
         const confirm = ref(false)
-        const confirm2 = ref(false)
+       
         const ocultar = ref(false)
         const icon = ref(false)
         const $q = useQuasar()
@@ -169,10 +154,13 @@ export default defineComponent({
         const onHide = () => {
             hide.value = !hide.value
         }
+
         const onReset = () => {
             name.value = ''
             description.value = ''
             price.value = ''
+            category.value = ''
+            status.value = ''
             file.value = []
 
         }
@@ -183,7 +171,6 @@ export default defineComponent({
         const list = () => {
             imagenStore.getProducts()
             ocultar.value = !ocultar.value
-
 
         }
 
@@ -204,10 +191,10 @@ export default defineComponent({
 
         }
 
-       /* const onUpdate = () => {
-            imagenStore.updateProduct(name.value, description.value, price.value, file.value)
-            onReset()
-        }*/
+        /* const onUpdate = () => {
+             imagenStore.updateProduct(name.value, description.value, price.value, file.value)
+             onReset()
+         }*/
 
 
 
@@ -223,6 +210,8 @@ export default defineComponent({
             name,
             description,
             price,
+            category,
+            status,
             onHide,
             onReset,
             products,
@@ -232,8 +221,10 @@ export default defineComponent({
                 formData.append('name', name.value)
                 formData.append('description', description.value)
                 formData.append('price', price.value)
+                formData.append('category', category.value)
+                formData.append('status', status.value)
                 formData.append('image', file.value)
-                const response =    await api.post('/createProduct', formData)
+                const response = await api.post('/createProduct', formData)
                 console.log(response)
                 onReset()
                 $q.notify({
@@ -242,28 +233,36 @@ export default defineComponent({
                     message: 'Producto creado con exito',
                     icon: 'done'
                 })
-                
+
             },
 
-            async onUpdate(_id) {
-              const r = imagenStore.products.find(product => product._id === _id)
-                r.name = name.value
-                r.description = description.value
-                r.price = price.value
-                r.image = file.value
-                const response = await api.put(`/updateProduct/${_id}`, r)
-                console.log(response)
+            async onUpdate(_id, name, description, price, image) {
+                $q.dialog({
+                    title: 'Prompt',
+                    message: 'What is your name?',
+                    prompt: {
+                        model: name,
+                        type: 'text' // optional
+                    },
+                    
+                    cancel: true,
+                    persistent: true
+                }).onOk(data => {
+                    // console.log('>>>> OK, received', data)
+
+
+                })
             },
+
 
 
             list,
             confirm,
-            confirm2,
             icon,
             hide2,
             ocultar,
             deleteProduct,
-          //  onUpdate
+            //  onUpdate
 
         }
     }

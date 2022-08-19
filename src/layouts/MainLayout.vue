@@ -82,7 +82,29 @@
               <q-item-section>Imagenes Siipi</q-item-section>
             </q-item>
 
-          
+
+            <q-item clickable v-ripple :active="link === 'productSiipi'" @click="link = 'productSiipi'"
+              active-class="my-menu-link" to="/productSiipi">
+              <q-item-section avatar>
+                <q-icon name="fa-solid fa-bottle-water" />
+              </q-item-section>
+
+              <q-item-section>Productos Siipi</q-item-section>
+            </q-item>
+
+
+            <q-item clickable v-ripple :active="link === 'tableProduct'" @click="link = 'tableProduct'"
+              active-class="my-menu-link" to="/tableProduct">
+              <q-item-section avatar>
+                <q-icon name="fa-solid fa-table-cells" />
+              </q-item-section>
+
+              <q-item-section>Productos Siipi Tabla</q-item-section>
+            </q-item>
+
+
+
+
           </q-expansion-item>
         </q-list>
       </q-scroll-area>
@@ -114,5 +136,5 @@ export default {
 <style lang="sass">
 .my-menu-link
   color: white
-  background: #F2C037
+  background: #0f950c
 </style>
