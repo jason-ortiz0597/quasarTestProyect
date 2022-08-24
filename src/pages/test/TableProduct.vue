@@ -12,14 +12,12 @@
                     </template>
 
                 </q-input>
-
-
             </template>
 
 
             <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
-                    <q-btn color="primary" icon="edit" flat round @click="updateCustomer(props.row._id)" />
+                    <q-btn color="primary" icon="edit" flat round @click="updateCustomer(props.row)" />
                     <q-btn color="negative" icon="delete" flat round @click="deleteCustomer(props.row._id)" />
 
                 </q-td>
@@ -38,7 +36,7 @@
 
         </q-table>
 
-        <q-dialog v-model="confirm" persistent>
+        <q-dialog v-model="confirm" >
             <q-card>
                 <q-card-section class="row items-center">
                     <div class="justify-center">
@@ -207,34 +205,9 @@ export default {
             }
         }
 
-        const updateCustomer = async (id) => {
-            console.log(id)
+        const updateCustomer = async (row) => {
             try {
-
-                await api.put(`/updateCustomer/${id}`, {
-                    ci: ci.value,
-                    name: name.value,
-                    lastname: lastname.value,
-                    email: email.value,
-                    phone: phone.value,
-                    address: address.value,
-                    city: city.value
-                })
-                ci.value = ''
-                name.value = ''
-                lastname.value = ''
-                email.value = ''
-                phone.value = ''
-                address.value = ''
-                city.value = ''
-                $q.notify({
-                    color: 'positive',
-                    message: 'Cliente actualizado correctamente'
-
-                })
-
-                await getCustomer()
-                confirm2.value = false
+                console.log(row)
             } catch (error) {
                 console.log(error)
             }

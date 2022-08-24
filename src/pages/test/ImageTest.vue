@@ -19,12 +19,11 @@
         <div class="col-md-6">
 
             <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md" v-if="!hide">
-                <q-input v-model="name" type="text" label="Nombre Producto" filled />
+                    <q-input v-model="name" type="text" label="Nombre Producto" filled />
                 <q-input v-model="description" type="text" label="Descripcion Breve Producto" filled />
                 <q-input v-model="price" type="text" label="Precio Producto" filled />
-                <q-input v-model="category" type="text" label="Categoria" filled/>
-                <q-input v-model="status" type="text" label="Estado del Producto" filled/>
-
+               
+        
                 <q-file v-model="file" label="Upload you Image" name="file" filled/>
 
 
@@ -41,7 +40,7 @@
                 <div class="q-pa-md q-gutter-md">
 
                     <q-list bordered>
-                        <q-item v-for="({ _id, name, description, price, category, status ,image }, index) in imagenStore.products"
+                        <q-item v-for="({ _id, name, description, price ,image }, index) in imagenStore.products"
                             :key="index" clickable v-ripple>
                             <q-item-section>
                                 {{ index + 1 }}
@@ -53,13 +52,7 @@
                                 {{ description }}
                             </q-item-section>
                             <q-item-section>
-                                {{ price }} Bs
-                            </q-item-section>
-                            <q-item-section>
-                                {{ category }}
-                            </q-item-section>
-                            <q-item-section>
-                                {{ status }}
+                                {{ price }} 
                             </q-item-section>
                             <q-item-section>
                                 <img :src="image.secure_url" width="100" height="100" />
@@ -135,8 +128,6 @@ export default defineComponent({
         const name = ref('')
         const description = ref('')
         const price = ref('')
-        const category = ref('')
-        const status = ref('')
         const products = ref([])
         const file = ref([])
         const confirm = ref(false)
@@ -159,8 +150,6 @@ export default defineComponent({
             name.value = ''
             description.value = ''
             price.value = ''
-            category.value = ''
-            status.value = ''
             file.value = []
 
         }
@@ -210,8 +199,6 @@ export default defineComponent({
             name,
             description,
             price,
-            category,
-            status,
             onHide,
             onReset,
             products,
@@ -221,8 +208,6 @@ export default defineComponent({
                 formData.append('name', name.value)
                 formData.append('description', description.value)
                 formData.append('price', price.value)
-                formData.append('category', category.value)
-                formData.append('status', status.value)
                 formData.append('image', file.value)
                 const response = await api.post('/createProduct', formData)
                 console.log(response)
@@ -236,7 +221,7 @@ export default defineComponent({
 
             },
 
-            async onUpdate(_id, name, description, price, image) {
+            async onUpdate(_id, name) {
                 $q.dialog({
                     title: 'Prompt',
                     message: 'What is your name?',

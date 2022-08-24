@@ -64,7 +64,7 @@
             </q-item>
           </q-expansion-item>
           <!-- Expansion Menu End. -->
-          <q-expansion-item :content-inset-level="0.5" expand-separator icon="science" label="Mis Practicas">
+          <q-expansion-item :content-inset-level="0.5" expand-separator icon="science" label="Almacen Pruebas">
             <q-item clickable v-ripple :active="link === 'productosTest'" @click="link = 'productosTest'"
               active-class="my-menu-link" to="/productTest">
               <q-item-section avatar>
@@ -101,11 +101,19 @@
 
               <q-item-section>Productos Siipi Tabla</q-item-section>
             </q-item>
-
-
-
-
           </q-expansion-item>
+          <!-- Expansion Menu End. -->
+          <q-expansion-item :content-inset-level="0.5" expand-separator icon="fa-solid fa-flask-vial" label="Almacen Pruebas V-2">
+            <q-item clickable v-ripple :active="link === 'provaiderTest'" @click="link = 'provaiderTest'"
+              active-class="my-menu-link" to="/provaiderTest">
+              <q-item-section avatar>
+                <q-icon name="fa-solid fa-user-tag" />
+              </q-item-section>
+
+              <q-item-section>Proveedores Siipi</q-item-section>
+            </q-item>
+          </q-expansion-item>
+
         </q-list>
       </q-scroll-area>
     </q-drawer>
